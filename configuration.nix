@@ -72,32 +72,45 @@
     discord
     dmenu
     firefox
+    gh
     git
     gnupg
     pass
     pavucontrol
+    ripgrep
     wget
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    vimAlias = true;
-    configure = {
-      customRC = ''
-        set number
-	set relativenumber
+  programs = {
+    gnupg.agent = {
+      enable = true;
+      enableSSHSupport = true;
+    };
+
+    neovim = {
+      enable = true;
+      defaultEditor = true;
+      vimAlias = true;
+      configure = {
+        customRC = ''
+          set number
+          set relativenumber
+        '';
+      };
+    };
+
+    fish.enable = true;
+    bash = {
+      shellInit = ''
+        export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+        gpgconf --launch gpg-agent
       '';
+      interactiveShellInit = "fish";
     };
   };
-  programs.fish.enable = true;
 
   system.autoUpgrade.enable = true;
   system.autoUpgrade.allowReboot = false;
