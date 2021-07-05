@@ -83,7 +83,11 @@
     wget
 
     cargo
+    clang
     rustc
+
+    # needed for coc.nvim
+    nodejs-slim-16_x
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -101,8 +105,28 @@
       vimAlias = true;
       configure = {
         customRC = ''
+          " automatic vim-plug installation
+          let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+          if empty(glob(data_dir . '/autoload/plug.vim'))
+            silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+            autocmd VimEnter * PlugInstall --sync | source '~/.config/nvim/init.vim'
+          endif
+
+          call plug#begin('~/.nvim/plugged')
+          Plug 'neoclide/coc.nvim', {'branch': 'release'}
+          call plug#end()
+
+          set updatetime=200
+          autocmd CursorHold * silent call CocActionAsync('highlight')
+
+          set list
+          set listchars=tab:→»,nbsp:×,trail:·
           set number
           set relativenumber
+          set tabstop=4
+          set shiftwidth=4
+
+          tnoremap <Esc> <C-\><C-n>
         '';
       };
     };
@@ -130,7 +154,7 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
-  
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
