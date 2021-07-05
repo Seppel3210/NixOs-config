@@ -68,17 +68,22 @@
   # List packages installed in system profile. To search, run:
   environment.systemPackages = with pkgs; [
     alacritty
-    bat
     discord
     dmenu
     firefox
+    pavucontrol
+
+    bat
+    fd
     gh
     git
     gnupg
     pass
-    pavucontrol
     ripgrep
     wget
+
+    cargo
+    rustc
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
