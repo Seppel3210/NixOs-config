@@ -81,6 +81,7 @@
     pass
     ripgrep
     wget
+    zoxide
 
     cargo
     clang
@@ -108,7 +109,13 @@
       };
     };
 
-    fish.enable = true;
+    fish = {
+      enable = true;
+      interactiveShellInit = ''
+        zoxide init fish | source
+      '';
+    };
+
     bash = {
       shellInit = ''
         export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
