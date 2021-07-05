@@ -88,7 +88,7 @@
     rustc
 
     # needed for coc.nvim
-    nodejs-slim-16_x
+    nodejs-16_x
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -105,7 +105,13 @@
       defaultEditor = true;
       vimAlias = true;
       configure = {
-        customRC = builtins.readFile (./. + "/nvim.rc");
+        customRC = builtins.readFile (./. + "/nvim.rc") + ''
+          let $RUST_SRC_PATH = '${pkgs.stdenv.mkDerivation {
+          inherit (pkgs.rustc) src;
+          inherit (pkgs.rustc.src) name;
+          phases = ["unpackPhase" "installPhase"];
+          installPhase = ''cp -r library $out'';
+        }}'';
       };
     };
 
