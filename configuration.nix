@@ -60,6 +60,7 @@
   # services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.defaultUserShell = pkgs.fish;
   users.users.seppel = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
@@ -121,6 +122,16 @@
       interactiveShellInit = ''
         zoxide init fish | source
       '';
+      promptInit = ''
+        set -l nix_shell_info (
+          if test -n "$IN_NIX_SHELL"
+            echo -n "<nix-shell> "
+          end
+        )
+      '';
+      shellAliases = {
+        nix-shell = "nix-shell --run fish";
+      };
     };
 
     bash = {
@@ -128,7 +139,6 @@
         export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
         gpgconf --launch gpg-agent
       '';
-      interactiveShellInit = "exec fish";
     };
   };
 
