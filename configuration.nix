@@ -106,12 +106,13 @@
       vimAlias = true;
       configure = {
         customRC = builtins.readFile (./. + "/nvim.rc") + ''
-          let $RUST_SRC_PATH = '${pkgs.stdenv.mkDerivation {
-          inherit (pkgs.rustc) src;
-          inherit (pkgs.rustc.src) name;
-          phases = ["unpackPhase" "installPhase"];
-          installPhase = ''cp -r library $out'';
-        }}'';
+          let $RUST_SRC_PATH = '${with pkgs; stdenv.mkDerivation {
+            inherit (rustc) src;
+            inherit (rustc.src) name;
+            phases = ["unpackPhase" "installPhase"];
+            installPhase = ''cp -r library $out'';
+          }}'
+        '';
       };
     };
 
