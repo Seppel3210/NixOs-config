@@ -46,6 +46,7 @@
     layout = "de";
     xkbVariant = "bone";
     windowManager.herbstluftwm.enable = true;
+    desktopManager.plasma5.enable = true;
     videoDrivers = [ "nvidia" ];
   };
 
@@ -84,12 +85,17 @@
     wget
     zoxide
 
-    cargo
     clang
-    rustc
+    gnumake
+    pkg-config
+    rustup
 
+    alsa-lib
+    eudev
     # needed for coc.nvim
     nodejs-16_x
+    xorg.libX11
+    xorg.libXcursor
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -120,6 +126,7 @@
     fish = {
       enable = true;
       interactiveShellInit = ''
+        set PATH $PATH $HOME/.cargo/bin
         zoxide init fish | source
       '';
       promptInit = ''
@@ -165,4 +172,3 @@
   system.stateVersion = "21.05"; # Did you read the comment?
 
 }
-
